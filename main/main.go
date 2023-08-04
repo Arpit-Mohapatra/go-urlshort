@@ -10,12 +10,22 @@ import (
 func main() {
 	mux := defaultMux()
 	pathsToUrls := map[string]string{
-		"/urlshort-godoc": "https://godoc.org/github.com/gophercises/urlshort",
+		"/urlshort-godoc": "https://www.linkedin.com/in/arpit-mohapatra-708520248/",
 		"/yaml-godoc":     "https://godoc.org/gopkg.in/yaml.v2",
 	}
 	mapHandler := urlshort.MapHandler(pathsToUrls, mux)
-	fmt.Println("Starting server on port 8080")
-	http.ListenAndServe(":8080", mapHandler)
+	yaml := `
+- path: /urlshort
+  url: https://github.com/Arpit-Mohapatra/go-urlshort
+- path: /urlshort-final
+  url: https://github.com/Arpit-Mohapatra/
+`
+	yamlHandler, err := urlshort.YAMLHandler([]byte(yaml), mapHandler)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("Starting sever at :8080")
+	http.ListenAndServe(":8080", yamlHandler)
 }
 
 func defaultMux() *http.ServeMux {
