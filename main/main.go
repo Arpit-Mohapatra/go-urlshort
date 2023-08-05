@@ -1,8 +1,10 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/Arpit-Mohapatra/urlshort"
 )
@@ -14,13 +16,15 @@ func main() {
 		"/yaml-godoc":     "https://godoc.org/gopkg.in/yaml.v2",
 	}
 	mapHandler := urlshort.MapHandler(pathsToUrls, mux)
-	yaml := `
-- path: /urlshort
-  url: https://github.com/Arpit-Mohapatra/go-urlshort
-- path: /urlshort-final
-  url: https://github.com/Arpit-Mohapatra/
-`
-	yamlHandler, err := urlshort.YAMLHandler([]byte(yaml), mapHandler)
+	
+	yamlFile := flag.String("yaml", "data.yaml", "yaml file in the form of path and url")
+	flag.Parse()
+	yamlData, err := os.ReadFile(*yamlFile)
+	if err != nil {
+		fmt.Printf("Could not read %v", *yamlFile)
+		return
+	}
+	yamlHandler, err := urlshort.YAMLHandler(yamlData, mapHandler)
 	if err != nil {
 		panic(err)
 	}
@@ -37,3 +41,4 @@ func defaultMux() *http.ServeMux {
 func hello(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "Hello from port 8080")
 }
+
