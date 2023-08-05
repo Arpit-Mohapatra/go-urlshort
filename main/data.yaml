@@ -1,0 +1,11 @@
+- path: /firstResource
+  url: https://wikipedia.org
+
+- path: /anotherPath
+  url: https://google.com
+
+- path: /urlshort
+  url: https://github.com/Arpit-Mohapatra/go-urlshort
+
+- path: /urlshort-final
+  url: https://github.com/Arpit-Mohapatra/
