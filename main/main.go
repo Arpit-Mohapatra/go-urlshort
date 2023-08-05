@@ -18,18 +18,32 @@ func main() {
 	mapHandler := urlshort.MapHandler(pathsToUrls, mux)
 	
 	yamlFile := flag.String("yaml", "data.yaml", "yaml file in the form of path and url")
+	jsonFile := flag.String("json", "data.json", "json file in the form of path and url")
 	flag.Parse()
+	
 	yamlData, err := os.ReadFile(*yamlFile)
 	if err != nil {
-		fmt.Printf("Could not read %v", *yamlFile)
+		fmt.Printf("Could not read %v\n", *yamlFile)
 		return
 	}
 	yamlHandler, err := urlshort.YAMLHandler(yamlData, mapHandler)
 	if err != nil {
 		panic(err)
 	}
+
+	jsonData, err := os.ReadFile(*jsonFile)
+	if err != nil {
+		fmt.Printf("Could not read %v\n", *jsonFile)
+		return
+	}
+	jsonHandler, err := urlshort.JSONHandler(jsonData, mapHandler)
+	if err != nil {
+		panic(err)
+	}
+	_=jsonHandler
 	fmt.Println("Starting sever at :8080")
 	http.ListenAndServe(":8080", yamlHandler)
+	// http.ListenAndServe(":8080", jsonHandler)
 }
 
 func defaultMux() *http.ServeMux {
